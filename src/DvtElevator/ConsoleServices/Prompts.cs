@@ -38,9 +38,9 @@ public static class Prompts
     /// <returns>Returns the number of floors for the building captured through the prompt</returns>
     private static byte NumberOfFloorsPrompt()
     {
-        return (byte)TextPrompt("Number of floors for the building: ", (Func<int, ValidationResult>?)NumberOfPeopleInElevatorValidation);
+        return (byte)TextPrompt("Number of floors for the building: ", (Func<int, ValidationResult>?)NumberOfFloorInElevatorValidation);
         
-        ValidationResult NumberOfPeopleInElevatorValidation(int numberOfPeole)
+        ValidationResult NumberOfFloorInElevatorValidation(int numberOfPeole)
         {
             return numberOfPeole switch
             {
