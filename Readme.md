@@ -1,8 +1,7 @@
 ## DVT Elevator Challenge
 
 *Preview*
-![dvt elevator.gif](src%2FDvtElevator%2Fbin%2FRelease%2Fnet8.0%2Fdvt%20elevator.gif)
-------------------------------------------------------------------------------------
+![dvt elevator](https://github.com/mtsikevich/DvtElevator/assets/29281731/5d455bbb-983b-49a1-b740-867eee8e26fe)
 
 ## How to start?
 
