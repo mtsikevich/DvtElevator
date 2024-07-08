@@ -1,8 +1,10 @@
 using DvtElevator.Models.Elevators;
+using DvtElevator.Services.ElevatorDispatcher;
 
 namespace DvtElevator.Services.ElevatorService;
 
 public class ElevatorService(
+    IElevatorDispatcher elevatorDispatcher,
     byte buildingFloorCount = 10) : IElevatorService
 {
     private readonly List<ElevatorBase> _elevators=[];
@@ -19,11 +21,11 @@ public class ElevatorService(
         _elevators.Add(elevator);
     }
     
-    public Task<ElevatorBase?> PickOptimalElevatorAsync(byte floor, byte numberOfWaitingPassengers)
+    public Task<ElevatorBase> PickOptimalElevatorAsync(byte floor, byte numberOfWaitingPassengers)
     {
         if (_elevators.Count == 0)
-            throw new BuildingHasNoElevators();
-
-        return Task.FromResult(_elevators.FirstOrDefault());
+            throw new BuildingHasNoElevators(); 
+        
+        return elevatorDispatcher.ElevatorPicker(_elevators, floor, numberOfWaitingPassengers);
     }
 }
