@@ -23,9 +23,19 @@ public class ElevatorService(
     
     public Task<ElevatorBase> PickOptimalElevatorAsync(byte floor, byte numberOfWaitingPassengers)
     {
-        if (_elevators.Count == 0)
-            throw new BuildingHasNoElevators(); 
-        
-        return elevatorDispatcher.ElevatorPicker(_elevators, floor, numberOfWaitingPassengers);
+        Task<ElevatorBase> pickedElevator = default!;
+        try
+        {
+            if (_elevators.Count == 0)
+                throw new BuildingHasNoElevators();
+
+            pickedElevator = elevatorDispatcher.ElevatorPicker(_elevators, floor, numberOfWaitingPassengers);
+        }
+        catch (ElevatorsNotAvailable)
+        {
+            Console.WriteLine();
+        }
+
+        return pickedElevator;
     }
 }
