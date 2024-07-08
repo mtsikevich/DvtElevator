@@ -9,15 +9,16 @@ public static class Prompts
     /// Function to build the ElevatorService:
     /// Prompts the number of floors the fictional/imaginary building has
     /// </summary>
-    /// <param name="numberOfElevator">Number of elevators the building will have</param>
     /// <returns>Returns the Created ElevatorService</returns>
-    public static ElevatorService CreateElevatorService(byte numberOfElevator = 1)
+    public static ElevatorService CreateElevatorService()
     {
         var buildingFloorCount = NumberOfFloorsPrompt();
+        var buildingElevatorCount = NumberOfElevatorsPrompt();
+        
         IElevatorDispatcher dispatcherService = new ElevatorDispatcher();
         var elevatorService = new ElevatorService(dispatcherService,buildingFloorCount);
 
-        foreach (var _ in Enumerable.Range(1,numberOfElevator))
+        foreach (var _ in Enumerable.Range(1,buildingElevatorCount))
         {
             try
             {
@@ -38,14 +39,33 @@ public static class Prompts
     /// <returns>Returns the number of floors for the building captured through the prompt</returns>
     private static byte NumberOfFloorsPrompt()
     {
-        return (byte)TextPrompt("Number of floors for the building: ", (Func<int, ValidationResult>?)NumberOfPeopleInElevatorValidation);
+        return (byte)TextPrompt("Number of floors for the building: ", (Func<int, ValidationResult>?)NumberOfFloorInElevatorValidation);
         
-        ValidationResult NumberOfPeopleInElevatorValidation(int numberOfPeole)
+        ValidationResult NumberOfFloorInElevatorValidation(int numberOfPeole)
         {
             return numberOfPeole switch
             {
                 < 0 => ValidationResult.Error("[red]You cannot have < 1 floor(s)[/]"),
-                > 10 => ValidationResult.Error($"[red]You cannot have more than 100 floors[/]"),
+                > 100 => ValidationResult.Error($"[red]You cannot have more than 100 floors[/]"),
+                _ => ValidationResult.Success()
+            };
+        }
+    }
+    
+    /// <summary>
+    /// Prompt function for getting the number of elevators for the fictional/imaginary building
+    /// </summary>
+    /// <returns>Returns the number of floors for the building captured through the prompt</returns>
+    private static byte NumberOfElevatorsPrompt()
+    {
+        return (byte)TextPrompt("Building elevator count: ", (Func<int, ValidationResult>?)NumberOfElevatorsInTheBuildingValidation);
+        
+        ValidationResult NumberOfElevatorsInTheBuildingValidation(int numberOfElevators)
+        {
+            return numberOfElevators switch
+            {
+                < 0 => ValidationResult.Error("[red]You cannot have < 1 elevator(s)[/]"),
+                > 10 => ValidationResult.Error($"[red]You cannot have more than 10 elevators[/]"),
                 _ => ValidationResult.Success()
             };
         }
