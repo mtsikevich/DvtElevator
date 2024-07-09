@@ -4,6 +4,14 @@ namespace DvtElevator.Services.ElevatorDispatcher;
 
 public class ElevatorDispatcher: IElevatorDispatcher
 {
+    /// <summary>
+    /// Picks any of the elevators nearest to the target floor
+    /// </summary>
+    /// <param name="elevators">Elevator collection to pick from</param>
+    /// <param name="targetFloor">The requested floor</param>
+    /// <param name="numberOfWaitingPassengers">Number of passengers waiting for the elevator</param>
+    /// <returns>Elevator nearest to the target floor</returns>
+    /// <exception cref="ElevatorsNotAvailable">Thrown when no elevator has been found</exception>
     public Task<ElevatorBase> ElevatorPicker(List<ElevatorBase> elevators, byte targetFloor,
         int numberOfWaitingPassengers)
     {
