@@ -1,5 +1,8 @@
 namespace DvtElevator.Models.Elevators;
 
+/// <summary>
+/// Elevator status data type
+/// </summary>
 public class ElevatorStatus: ICloneable
 {
     public bool IsMoving { get; set; }
@@ -10,6 +13,10 @@ public class ElevatorStatus: ICloneable
     public DoorState DoorState { get; set; }
     public Floor HighestFloor { get; set; }
     
+    /// <summary>
+    /// Create a deep clone of the object.
+    /// </summary>
+    /// <returns>Deep clone of elevator status object.</returns>
     public object Clone()
     {
         return new ElevatorStatus

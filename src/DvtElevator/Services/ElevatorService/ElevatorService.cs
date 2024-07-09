@@ -9,8 +9,16 @@ public class ElevatorService(
 {
     private readonly List<ElevatorBase> _elevators=[];
 
+    /// <summary>
+    /// Returns the number of floors the building has
+    /// </summary>
     public byte BuildingFloorCount => buildingFloorCount;
 
+    /// <summary>
+    /// Used to add the elevator to the building
+    /// </summary>
+    /// <param name="elevator">The elevator to add to the building</param>
+    /// <exception cref="ElevatorExceedsBuildingFloors">Thrown when the elevator being added is configured to have access to more buildings that the building has</exception>
     public void AddElevator(ElevatorBase elevator)
     {
         elevator.Number = _elevators.Count + 1;
@@ -21,6 +29,13 @@ public class ElevatorService(
         _elevators.Add(elevator);
     }
     
+    /// <summary>
+    /// Picks any of the elevators near the target floor 
+    /// </summary>
+    /// <param name="floor">The target floor</param>
+    /// <param name="numberOfWaitingPassengers">Number of passengers requesting the elevator</param>
+    /// <returns>Returns the nearest elevator</returns>
+    /// <exception cref="BuildingHasNoElevators">Thrown when there are no elevators to pick from</exception>
     public Task<ElevatorBase> PickOptimalElevatorAsync(byte floor, byte numberOfWaitingPassengers)
     {
         Task<ElevatorBase> pickedElevator = default!;

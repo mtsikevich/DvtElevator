@@ -2,8 +2,17 @@ using System.Reactive.Linq;
 
 namespace DvtElevator.Models.Elevators;
 
+/// <summary>
+/// The base elevator 
+/// </summary>
+/// <param name="maxPassengerWeightLimit">The maximum elevator weight limit</param>
+/// <param name="highestFloor">The highest floor the elevator will have access to</param>
+/// <param name="averageMillisecondsBetweenFloors">The average time between floor (elevator speed)</param>
 public abstract class ElevatorBase(Kg? maxPassengerWeightLimit, Floor highestFloor, short averageMillisecondsBetweenFloors)
 {
+    /// <summary>
+    /// Elevator status
+    /// </summary>
     public ElevatorStatus ElevatorStatus { get;} = new()
     {
         IsMoving = false,
@@ -15,9 +24,21 @@ public abstract class ElevatorBase(Kg? maxPassengerWeightLimit, Floor highestFlo
         MaxPassengerWeightLimit = maxPassengerWeightLimit ?? Constants.MaxWeightForPeopleElevator
     };
     
+    /// <summary>
+    /// The elevator number (assigned by the elevator service), e.g. 1, 2, 3 ...
+    /// </summary>
     public int? Number { get; set; }
+    
+    /// <summary>
+    /// The time it takes the passenger to enter the elevator
+    /// </summary>
     protected virtual TimeSpan AverageTimeToGetIntoElevator => TimeSpan.FromSeconds(2);
     
+    /// <summary>
+    /// Process the elevator request from the prompt
+    /// </summary>
+    /// <param name="targetFloor">The requested floor</param>
+    /// <returns>Observable that will show the changing elevator state in realtime</returns>
     public virtual IObservable<ElevatorStatus> ProcessElevatorRequestAsync(byte targetFloor)
     {
         var initialFloor = ElevatorStatus.CurrentFloor;
@@ -44,6 +65,12 @@ public abstract class ElevatorBase(Kg? maxPassengerWeightLimit, Floor highestFlo
         });
     }
 
+    /// <summary>
+    /// Updates the state of the elevator properties
+    /// </summary>
+    /// <param name="elevatorDirection">The direction of the elevator</param>
+    /// <param name="elevatorDoorState">The door state (open or close) of the elevator</param>
+    /// <param name="isMoving">Indicates whether the elevator is moving or not</param>
     private void UpdateMovementAndDoorStatus(Direction elevatorDirection, DoorState elevatorDoorState, bool isMoving)
     {
         ElevatorStatus.Direction = elevatorDirection;
